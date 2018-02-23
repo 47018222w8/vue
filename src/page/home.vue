@@ -1,20 +1,17 @@
 <template>
-  <el-container class="c-home">
+  <el-container v-if="menus" class="c-home">
     <el-aside style="width:200px;">
       <el-menu default-active="1" router style="height:100%;" :collapse="isCollapse">
         <el-menu-item index="/">
           <i class="el-icon-fa-home"></i>
           <span slot="title">首页</span>
         </el-menu-item>
-        <el-submenu index="2">
+        <el-submenu v-if="item.children.length" v-for="(item, index) in menus" index="2">
           <template slot="title">
             <i class="el-icon-fa-lock"></i>
-            <span>权限</span>
+            <span>{{item.name}}</span>
           </template>
-          <el-menu-item index="">账号</el-menu-item>
-          <el-menu-item index="2-2">角色</el-menu-item>
-          <el-menu-item index="2-3">菜单</el-menu-item>
-          <el-menu-item index="/inter">接口</el-menu-item>
+          <el-menu-item v-for="(son, index) in item.children" :index="son.route">{{son.name}}</el-menu-item>
         </el-submenu>
       </el-menu>
     </el-aside>
@@ -50,14 +47,18 @@
           { name: '标签三', type: 'info' },
           { name: '标签四', type: 'warning' },
           { name: '标签五', type: 'danger' }
-        ]
+        ],
+        menus: []
       }
     },
     created() {
+      this._initData()
     },
     methods: {
-      shMenu() {
-        this.isCollapse ? this.isCollapse = false : this.isCollapse = true
+      async _initData() {
+        await this.$http.get('/users/menus').then((response) => {
+          this.menus = response.data
+        })
       }
     }
   }

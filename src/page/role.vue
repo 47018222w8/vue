@@ -1,16 +1,22 @@
   <template>
   <div v-if="pageInfo">
-    <el-button type="primary" @click="$router.push({name: 'interAdd'})">添加接口</el-button>
-    <el-table  v-loading="loading" :data="tableData" style="width: 100%">
+    <el-button type="primary" @click="$router.push({name: 'roleAdd'})">新建角色</el-button>
+    <el-table :data="tableData" style="width:100%">
       <el-table-column type="index" width="80">
       </el-table-column>
-      <el-table-column prop="name" label="名称">
+      <el-table-column prop="name" label="名称" width="180">
       </el-table-column>
-      <el-table-column prop="code" label="code">
+      <el-table-column prop="code" label="code" width="100">
       </el-table-column>
-      <el-table-column prop="url" label="url">
+      <el-table-column label="可用接口">
+        <template slot-scope="props">
+          <el-tag v-for="(item, index) in props.row.inters">{{item.name}}</el-tag>
+        </template>
       </el-table-column>
-      <el-table-column prop="requestMethod" label="请求方式" >
+      <el-table-column label="可用菜单">
+        <template slot-scope="props">
+          <el-tag v-for="(item, index) in props.row.menus">{{item.name}}</el-tag>
+        </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" >
         <template slot-scope="scope">
@@ -29,16 +35,15 @@
       return {
         pageInfo: null,
         tableData: [],
-        params: { pageNum: 1, pageSize: 10 },
-        loading: false
+        params: { pageNum: 1, pageSize: 10 }
       }
     },
     created() {
       this._initData()
     },
     methods: {
-      async _initData() {
-        await this.$http.get('/inters', { params: this.params }).then((response) => {
+      _initData() {
+        this.$http.get('/roles', { params: this.params }).then((response) => {
           this.tableData = response.data.list
           this.pageInfo = response.data
         })
@@ -47,11 +52,7 @@
         this._initData()
       },
       toEdit(id) {
-        this.$router.push({ name: 'interEdit', params: { id: id } })
-      },
-      reload() {
-        this.$http.get('/reloadSecurity').then((response) => {
-        })
+        this.$router.push({ name: 'roleEdit', params: { id: id } })
       }
     }
   }

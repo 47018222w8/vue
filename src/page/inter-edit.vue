@@ -1,5 +1,5 @@
   <template>
-  <el-form :model="inter" :rules="rules" ref="inter" label-width="100px" class="c-inter-add">
+  <el-form v-if="inter" :model="inter" :rules="rules" ref="inter" label-width="100px" class="c-inter-add">
     <el-form-item class="c-item" label="url" prop="url">
       <el-input v-model="inter.url" placeholder="请输入url"></el-input>
     </el-form-item>
@@ -17,11 +17,6 @@
         <el-option label="delete" value="delete"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item class="c-item" label="赋予角色">
-      <el-checkbox-group v-model="inter.roleIds">
-        <el-checkbox v-for="(item,index) in roles" :key="index" :disabled="item.checked" :label="item.id">{{item.name}}</el-checkbox>
-      </el-checkbox-group>
-    </el-form-item>
     <el-form-item>
       <el-button type="primary" :loading="loading" :disabled="loading" @click="sub('inter')">{{loading?'提交中...':'提交'}}</el-button>
     </el-form-item>
@@ -29,17 +24,10 @@
 </template>
 
   <script>
-  import { SECURITY_ADMIN_CODE } from '@/components/constant'
   export default {
     data() {
       return {
-        inter: {
-          url: '',
-          name: '',
-          code: '',
-          requestMethod: 'GET',
-          roleIds: []
-        },
+        inter: null,
         rules: {
           url: [
             { required: true, message: '请输入url', trigger: 'blur' }
@@ -51,7 +39,6 @@
             { required: true, message: '请输入编码', trigger: 'blur' }
           ]
         },
-        roles: [],
         loading: false
       }
     },
@@ -60,24 +47,16 @@
     },
     methods: {
       async _initData() {
-        await this.$http.get('/all').then((response) => {
-          this.roles = response.data.roles
-          // 默认选中管理员
-          for (let item of this.roles) {
-            if (item.code === SECURITY_ADMIN_CODE) {
-              item.checked = true
-              this.inter.roleIds.push(item.id)
-              break
-            }
-          }
+        await this.$http.get('/inters/' + this.$route.params.id).then((response) => {
+          this.inter = response.data
         })
       },
       sub(name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
             this.loading = true
-            this.$http.post('/inters', this.inter).then((response) => {
-              this.$message.success('添加成功')
+            this.$http.put('/inters', this.inter).then((response) => {
+              this.$message.success('编辑成功')
               setTimeout(() => {
                 this.$router.push({ name: 'inter' })
               }, 1000)

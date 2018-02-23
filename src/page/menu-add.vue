@@ -1,29 +1,23 @@
-  <template>
-  <el-form :model="inter" :rules="rules" ref="inter" label-width="100px" class="c-inter-add">
-    <el-form-item class="c-item" label="url" prop="url">
-      <el-input v-model="inter.url" placeholder="请输入url"></el-input>
-    </el-form-item>
+<template>
+  <el-form v-if="roles" :model="menu" :rules="rules" ref="menu" label-width="100px" class="c-menu-add">
     <el-form-item class="c-item" label="名称" prop="name">
-      <el-input placeholder="请输入名称" v-model="inter.name"></el-input>
+      <el-input placeholder="请输入名称" v-model="menu.name"></el-input>
     </el-form-item>
-    <el-form-item class="c-item" label="唯一编码" prop="code">
-      <el-input placeholder="请输入唯一编码" v-model="inter.code"></el-input>
+    <el-form-item class="c-item" label="route">
+      <el-input placeholder="请输入route" v-model="menu.route"></el-input>
     </el-form-item>
-    <el-form-item class="c-item" label="HTTP动词">
-      <el-select v-model="inter.requestMethod" style="width:100%;">
-        <el-option label="get" value="get"></el-option>
-        <el-option label="post" value="post"></el-option>
-        <el-option label="put" value="put"></el-option>
-        <el-option label="delete" value="delete"></el-option>
+    <el-form-item class="c-item" label="父菜单">
+      <el-select v-model="menu.pid" style="width:100%;">
+        <el-option v-for="(item, index) in pMenus" :key="index" :label="item.name" :value="item.id"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item class="c-item" label="赋予角色">
-      <el-checkbox-group v-model="inter.roleIds">
+      <el-checkbox-group v-model="menu.roleIds">
         <el-checkbox v-for="(item,index) in roles" :key="index" :disabled="item.checked" :label="item.id">{{item.name}}</el-checkbox>
       </el-checkbox-group>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" :loading="loading" :disabled="loading" @click="sub('inter')">{{loading?'提交中...':'提交'}}</el-button>
+      <el-button type="primary" :loading="loading" :disabled="loading" @click="sub('menu')">{{loading?'提交中...':'提交'}}</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -33,22 +27,16 @@
   export default {
     data() {
       return {
-        inter: {
-          url: '',
+        menu: {
           name: '',
-          code: '',
-          requestMethod: 'GET',
+          pid: 0,
+          route: '',
           roleIds: []
         },
+        pMenus: [{ name: '顶级菜单', id: 0 }],
         rules: {
-          url: [
-            { required: true, message: '请输入url', trigger: 'blur' }
-          ],
           name: [
             { required: true, message: '请输入名称', trigger: 'blur' }
-          ],
-          code: [
-            { required: true, message: '请输入编码', trigger: 'blur' }
           ]
         },
         roles: [],
@@ -66,21 +54,30 @@
           for (let item of this.roles) {
             if (item.code === SECURITY_ADMIN_CODE) {
               item.checked = true
-              this.inter.roleIds.push(item.id)
+              this.menu.roleIds.push(item.id)
               break
             }
           }
+          response.data.menus.forEach(element => {
+            if (element.pid === 0) {
+              this.pMenus.push(element)
+            }
+          })
         })
       },
       sub(name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
             this.loading = true
-            this.$http.post('/inters', this.inter).then((response) => {
+            this.$http.post('/menus', this.menu).then((response) => {
               this.$message.success('添加成功')
               setTimeout(() => {
-                this.$router.push({ name: 'inter' })
+                this.$router.push({ name: 'menu' })
               }, 1000)
+            }).catch((error) => {
+              let result = error.response
+              result.status === 400 && this.$message.error(result.data.message)
+              this.loading = false
             })
           } else {
             return false
@@ -93,7 +90,7 @@
 
 <style lang="less">
 @import "../style/admin.less";
-.c-inter-add {
+.c-menu-add {
   padding-top: 10px;
   .c-item {
     width: 20%;
