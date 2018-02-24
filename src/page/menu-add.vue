@@ -1,10 +1,10 @@
 <template>
   <el-form v-if="roles" :model="menu" :rules="rules" ref="menu" label-width="100px" class="c-menu-add">
     <el-form-item class="c-item" label="名称" prop="name">
-      <el-input placeholder="请输入名称" v-model="menu.name"></el-input>
+      <el-input placeholder="请输入名称" v-model="menu.name" :maxlength="10"></el-input>
     </el-form-item>
     <el-form-item class="c-item" label="route">
-      <el-input placeholder="请输入route" v-model="menu.route"></el-input>
+      <el-input placeholder="请输入route" v-model="menu.route" :maxlength="20"></el-input>
     </el-form-item>
     <el-form-item class="c-item" label="父菜单">
       <el-select v-model="menu.pid" style="width:100%;">

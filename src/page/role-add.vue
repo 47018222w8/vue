@@ -1,10 +1,10 @@
 <template>
   <el-form :model="role" :rules="rules" ref="role" label-width="100px" class="c-role-add">
     <el-form-item class="c-item" label="名称" prop="name">
-      <el-input placeholder="请输入名称" v-model="role.name"></el-input>
+      <el-input placeholder="请输入名称" v-model="role.name" :maxlength="20"></el-input>
     </el-form-item>
-    <el-form-item class="c-item" label="唯一编码" prop="code">
-      <el-input placeholder="请输入唯一编码" v-model="role.code"></el-input>
+    <el-form-item class="c-item" label="唯一编码" prop="code" >
+      <el-input placeholder="请输入唯一编码" v-model="role.code" :maxlength="10"></el-input>
     </el-form-item>
     <el-form-item label="可用接口" prop="interIds">
       <el-checkbox-group v-model="role.interIds">
@@ -86,6 +86,10 @@
               setTimeout(() => {
                 this.$router.push({ name: 'role' })
               }, 1000)
+            }).catch((error) => {
+              let result = error.response
+              result.status === 400 && this.$message.error(result.data.message)
+              this.loading = false
             })
           } else {
             return false

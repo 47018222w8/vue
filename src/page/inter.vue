@@ -1,7 +1,7 @@
   <template>
-  <div v-if="pageInfo">
+  <div >
     <el-button type="primary" @click="$router.push({name: 'interAdd'})">添加接口</el-button>
-    <el-table  v-loading="loading" :data="tableData" style="width: 100%">
+    <el-table  v-loading="!tableData.length" :data="tableData" style="width: 100%">
       <el-table-column type="index" width="80">
       </el-table-column>
       <el-table-column prop="name" label="名称">
@@ -18,7 +18,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination @current-change="handleCurrentChange" :current-page.sync="params.pageNum" :page-size="params.pageSize" layout="total, prev, pager, next" :total="pageInfo.total">
+    <el-pagination v-if="pageInfo" @current-change="handleCurrentChange" :current-page.sync="params.pageNum" :page-size="params.pageSize" layout="total, prev, pager, next" :total="pageInfo.total">
     </el-pagination>
   </div>
 </template>

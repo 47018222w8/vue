@@ -1,20 +1,20 @@
   <template>
   <el-form :model="inter" :rules="rules" ref="inter" label-width="100px" class="c-inter-add">
     <el-form-item class="c-item" label="url" prop="url">
-      <el-input v-model="inter.url" placeholder="请输入url"></el-input>
+      <el-input v-model="inter.url" placeholder="请输入url" :maxlength="100"></el-input>
     </el-form-item>
     <el-form-item class="c-item" label="名称" prop="name">
-      <el-input placeholder="请输入名称" v-model="inter.name"></el-input>
+      <el-input placeholder="请输入名称" v-model="inter.name" :maxlength="20"></el-input>
     </el-form-item>
     <el-form-item class="c-item" label="唯一编码" prop="code">
-      <el-input placeholder="请输入唯一编码" v-model="inter.code"></el-input>
+      <el-input placeholder="请输入唯一编码" v-model="inter.code" :maxlength="10"></el-input>
     </el-form-item>
     <el-form-item class="c-item" label="HTTP动词">
       <el-select v-model="inter.requestMethod" style="width:100%;">
-        <el-option label="get" value="get"></el-option>
-        <el-option label="post" value="post"></el-option>
-        <el-option label="put" value="put"></el-option>
-        <el-option label="delete" value="delete"></el-option>
+        <el-option label="GET" value="GET"></el-option>
+        <el-option label="POST" value="POST"></el-option>
+        <el-option label="PUT" value="PUT"></el-option>
+        <el-option label="DELETE" value="DELETE"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item class="c-item" label="赋予角色">
@@ -81,6 +81,10 @@
               setTimeout(() => {
                 this.$router.push({ name: 'inter' })
               }, 1000)
+            }).catch((error) => {
+              let result = error.response
+              result.status === 400 && this.$message.error(result.data.message)
+              this.loading = false
             })
           } else {
             return false

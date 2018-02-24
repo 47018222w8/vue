@@ -1,7 +1,7 @@
   <template>
-  <div v-if="pageInfo">
+  <div>
     <el-button type="primary" @click="$router.push({name: 'roleAdd'})">新建角色</el-button>
-    <el-table :data="tableData" style="width:100%">
+    <el-table v-loading="!tableData.length" :data="tableData" style="width:100%">
       <el-table-column type="index" width="80">
       </el-table-column>
       <el-table-column prop="name" label="名称" width="180">
@@ -10,12 +10,12 @@
       </el-table-column>
       <el-table-column label="可用接口">
         <template slot-scope="props">
-          <el-tag v-for="(item, index) in props.row.inters">{{item.name}}</el-tag>
+          <el-tag v-for="(item, index) in props.row.inters" :key="index">{{item.name}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="可用菜单">
         <template slot-scope="props">
-          <el-tag v-for="(item, index) in props.row.menus">{{item.name}}</el-tag>
+          <el-tag v-for="(item, index) in props.row.menus" :key="index">{{item.name}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" >
@@ -24,7 +24,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination @current-change="handleCurrentChange" :current-page.sync="params.pageNum" :page-size="params.pageSize" layout="total, prev, pager, next" :total="pageInfo.total">
+    <el-pagination v-if="pageInfo" @current-change="handleCurrentChange" :current-page.sync="params.pageNum" :page-size="params.pageSize" layout="total, prev, pager, next" :total="pageInfo.total">
     </el-pagination>
   </div>
 </template>

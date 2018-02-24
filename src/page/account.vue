@@ -1,7 +1,7 @@
   <template>
-  <div v-if="pageInfo">
+  <div >
     <el-button type="primary" @click="$router.push({name: 'accountAdd'})">新建账户</el-button>
-    <el-table :data="tableData" style="width:100%">
+    <el-table v-loading="!tableData.length" :data="tableData" style="width:100%">
       <el-table-column type="index" width="80">
       </el-table-column>
       <el-table-column prop="username" label="用户名">
@@ -10,7 +10,7 @@
       </el-table-column>
       <el-table-column label="包含角色">
         <template slot-scope="props">
-          <el-tag v-for="(item, index) in props.row.roles">{{item.name}}</el-tag>
+          <el-tag v-for="(item, index) in props.row.roles" :key="index">{{item.name}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" >
@@ -19,7 +19,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination @current-change="handleCurrentChange" :current-page.sync="params.pageNum" :page-size="params.pageSize" layout="total, prev, pager, next" :total="pageInfo.total">
+    <el-pagination v-if="pageInfo" @current-change="handleCurrentChange" :current-page.sync="params.pageNum" :page-size="params.pageSize" layout="total, prev, pager, next" :total="pageInfo.total">
       </el-pagination>
   </div>
 </template>

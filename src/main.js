@@ -5,9 +5,8 @@ import App from './App'
 import store from './store/state'
 import { LOGIN_TO } from './store/mutation-type'
 import router from './router'
-import ElementUI from 'element-ui'
+import ElementUI, { Message } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
-import { Message } from 'element-ui';
 import axios from 'axios'
 import { BASE_URL, JWT_HEADER } from './components/constant'
 Vue.config.productionTip = false
