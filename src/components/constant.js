@@ -14,3 +14,4 @@ export const RE_EMAIL = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/
 export const RE_ID_CARD = /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/
 export const CUSTOMER_SERVICE_TEL = '0431-81806110'
 export const SECURITY_ADMIN_CODE = 'admin'
+export const SECURITY_MENUS_CODE = 'listMenusUserId'

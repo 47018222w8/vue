@@ -7,7 +7,7 @@
       <el-input placeholder="请输入名称" v-model="inter.name" :maxlength="20"></el-input>
     </el-form-item>
     <el-form-item class="c-item" label="唯一编码" prop="code">
-      <el-input placeholder="请输入唯一编码" v-model="inter.code" :maxlength="10"></el-input>
+      <el-input placeholder="请输入唯一编码" v-model="inter.code" :maxlength="50"></el-input>
     </el-form-item>
     <el-form-item class="c-item" label="HTTP动词">
       <el-select v-model="inter.requestMethod" style="width:100%;">

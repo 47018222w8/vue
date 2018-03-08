@@ -1,13 +1,13 @@
 <template>
   <el-container v-if="menus" class="c-home">
     <el-aside style="width:210px;">
-      <el-menu background-color="#545c64" text-color="#fff" :default-active="$route.path" 
-      :default-openeds="defaultOpeneds" ref="menu" router style="height:100%;" :collapse="isCollapse">
+      <el-menu background-color="#545c64" text-color="#fff"
+       :default-active="$route.path"  ref="menu" router style="height:100%;" :collapse="isCollapse">
         <el-menu-item index="/">
           <i class="el-icon-fa-home"></i>
           <span slot="title">首页</span>
         </el-menu-item>
-        <el-submenu  menu-trigger="click" v-if="item.children.length" v-for="(item, index) in menus" :key="index" :index="subIndex[index]">
+        <el-submenu menu-trigger="click" v-if="item.children.length" v-for="(item, index) in menus" :key="index" :index="subIndex[index]">
           <template slot="title">
             <i class="el-icon-fa-lock"></i>
             <span>{{item.name}}</span>
@@ -22,6 +22,15 @@
           <el-breadcrumb style="padding-left:10px;" separator="/">
             <el-breadcrumb-item v-for="(item, index) in breadcrumb" :key="index" :to="{ path: item.path}">{{item.name}}</el-breadcrumb-item>
           </el-breadcrumb>
+          <el-dropdown class="c-right" @command="handleCommand">
+            <span class="el-dropdown-link">
+              选项
+              <i class="el-icon-caret-bottom"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="a" >退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
         <div class="c-down">
           <el-tag class="c-tag" v-for="(tag, i) in tags" @click.native="$router.push({name: tag.routeName})" @close="closeTag(i)" :key="i" closable :type="tag.type">
@@ -38,6 +47,7 @@
 </template>
 
 <script>
+  import { JWT_HEADER } from '@/components/constant'
   export default {
     data() {
       return {
@@ -78,14 +88,14 @@
     },
     methods: {
       async _initData() {
-        await this.$http.get('/users/menus').then((response) => {
+        await this.$http.get('/users/0/menus').then((response) => {
           this.menus = response.data
         })
       },
       // 面包屑
       breadcrumbC(to) {
         // 首页
-        if (to.name === 'home') {
+        if (to.name === 'home' || to.name === 'forbidden') {
           this.breadcrumb = [{ name: '首页', path: '/' }]
           return
         }
@@ -122,12 +132,12 @@
       closeTag(i) {
         this.tags.splice(this.tags.indexOf(i), 1)
       },
-      leftMenuC() {
-        if (this.isCollapse) {
-          this.isCollapse = false
-        } else {
-          this.isCollapse = true
-        }
+      handleCommand(command) {
+        localStorage.removeItem(JWT_HEADER)
+        this.$message.success('退出成功')
+        setTimeout(() => {
+          this.$router.push({ name: 'login' })
+        }, 1000)
       }
     }
   }
@@ -155,6 +165,14 @@
       .display-flex;
       .align-items(center);
       .c-hand {
+        cursor: pointer;
+      }
+      .c-right {
+        position: absolute;
+        right: 20px;
+      }
+      .el-dropdown-link:hover {
+        color: @s-primary-color;
         cursor: pointer;
       }
     }

@@ -4,7 +4,7 @@
       <el-input placeholder="请输入名称" :disabled="adminDisabled" v-model="role.name" :maxlength="20"></el-input>
     </el-form-item>
     <el-form-item class="c-item" label="唯一编码" prop="code">
-      <el-input placeholder="请输入唯一编码" disabled v-model="role.code" :maxlength="10"></el-input>
+      <el-input placeholder="请输入唯一编码" disabled v-model="role.code" :maxlength="50"></el-input>
     </el-form-item>
     <el-form-item label="可用接口" prop="interIds">
       <el-checkbox-group v-model="role.interIds">

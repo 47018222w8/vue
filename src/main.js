@@ -3,7 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import store from './store/state'
-import { LOGIN_TO } from './store/mutation-type'
+// import { LOGIN_TO } from './store/mutation-type'
 import router from './router'
 import ElementUI, { Message } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -24,9 +24,14 @@ axios.interceptors.response.use(function (response) {
         name: 'error'
       })
       throw error
+    } else if (result.status === 403) {
+      router.push({
+        name: 'forbidden'
+      })
+      throw error
     } else if (result.status === 401 && result.data.code === 'AUTHORIZATION_EXPIRED') {
       localStorage.removeItem(JWT_HEADER)
-      store.commit(LOGIN_TO, { obj: { name: router.app._route.name, params: router.app._route.params } })
+      // store.commit(LOGIN_TO, { obj: { name: router.app._route.name, params: router.app._route.params } })
       Message.warning({
         message: '登录超时,即将返回登录页',
         center: true,

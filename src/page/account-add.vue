@@ -1,23 +1,25 @@
 <template>
-  <el-form :model="account" :rules="rules" ref="account" label-width="100px" class="c-account-add">
-    <el-form-item class="c-item" label="用户名" prop="username">
-      <el-input placeholder="请输入用户名" v-model="account.username" :maxlength="20"></el-input>
-    </el-form-item>
-    <el-form-item class="c-item" label="密码" prop="password">
-      <el-input type="password" placeholder="请输入密码" v-model="account.password" :maxlength="20"></el-input>
-    </el-form-item>
-    <el-form-item class="c-item" label="昵称" prop="nickName">
-      <el-input placeholder="请输入用昵称" v-model="account.nickName" :maxlength="10"></el-input>
-    </el-form-item>
-    <el-form-item label="包含角色" prop="roleIds">
-      <el-checkbox-group v-model="account.roleIds">
-        <el-checkbox v-for="(item,index) in roles" :key="index" :label="item.id">{{item.name}}</el-checkbox>
-      </el-checkbox-group>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" :loading="loading" :disabled="loading" @click="sub('account')">{{loading?'提交中...':'提交'}}</el-button>
-    </el-form-item>
-  </el-form>
+  <div>
+    <el-form :model="account" :rules="rules" ref="account" label-width="100px" class="c-account-add">
+      <el-form-item class="c-item" label="用户名" prop="username">
+        <el-input placeholder="请输入用户名" v-model="account.username" :maxlength="20"></el-input>
+      </el-form-item>
+      <el-form-item class="c-item" label="密码" prop="password">
+        <el-input type="password" placeholder="请输入密码" v-model="account.password" :maxlength="20"></el-input>
+      </el-form-item>
+      <el-form-item class="c-item" label="昵称" prop="nickName">
+        <el-input placeholder="请输入用昵称" v-model="account.nickName" :maxlength="10"></el-input>
+      </el-form-item>
+      <el-form-item label="包含角色" prop="roleIds">
+        <el-checkbox-group v-model="account.roleIds">
+          <el-checkbox v-for="(item,index) in roles" :key="index" :label="item.id">{{item.name}}</el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" :loading="loading" :disabled="loading" @click="sub('account')">{{loading?'提交中...':'提交'}}</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
 
   <script>

@@ -2,23 +2,23 @@
   <div>
     <el-button type="primary" @click="$router.push({name: 'roleAdd'})">新建角色</el-button>
     <el-table v-loading="!tableData.length" :data="tableData" style="width:100%">
-      <el-table-column type="index" width="80">
+      <el-table-column type="expand" width="80">
+        <template slot-scope="props">
+          <el-form label-position="left" >
+            <el-form-item label="可用接口">
+              <el-tag v-for="(item, index) in props.row.inters" :key="index">{{item.name}}</el-tag>
+            </el-form-item>
+            <el-form-item label="可用菜单">
+              <el-tag v-for="(item, index) in props.row.menus" :key="index">{{item.name}}</el-tag>
+            </el-form-item>
+          </el-form>
+        </template>
       </el-table-column>
       <el-table-column prop="name" label="名称" width="180">
       </el-table-column>
       <el-table-column prop="code" label="code" width="100">
       </el-table-column>
-      <el-table-column label="可用接口">
-        <template slot-scope="props">
-          <el-tag v-for="(item, index) in props.row.inters" :key="index">{{item.name}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="可用菜单">
-        <template slot-scope="props">
-          <el-tag v-for="(item, index) in props.row.menus" :key="index">{{item.name}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column fixed="right" label="操作" >
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button @click="toEdit(scope.row.id)" type="text" size="small">编辑</el-button>
         </template>

@@ -13,6 +13,7 @@ const accountAdd = r => require.ensure([], () => r(require('@/page/account-add')
 const inter = r => require.ensure([], () => r(require('@/page/inter')), 'inter')
 const interEdit = r => require.ensure([], () => r(require('@/page/inter-edit')), 'interEdit')
 const interAdd = r => require.ensure([], () => r(require('@/page/inter-add')), 'interAdd')
+const forbidden = r => require.ensure([], () => r(require('@/page/forbidden')), 'forbidden')
 Vue.use(Router)
 
 export default new Router({
@@ -73,6 +74,12 @@ export default new Router({
           name: 'role',
           component: role,
           meta: { name: '角色' }
+        },
+        {
+          path: 'forbidden',
+          name: 'forbidden',
+          component: forbidden,
+          meta: { noTag: true }
         },
         {
           path: 'roleAdd',

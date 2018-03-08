@@ -1,20 +1,20 @@
 <template>
-  <el-form :model="role" :rules="rules" ref="role" label-width="100px" class="c-role-add">
+  <el-form  v-loading="!menus.length" :model="role" :rules="rules" ref="role" label-width="100px" class="c-role-add">
     <el-form-item class="c-item" label="名称" prop="name">
       <el-input placeholder="请输入名称" v-model="role.name" :maxlength="20"></el-input>
     </el-form-item>
-    <el-form-item class="c-item" label="唯一编码" prop="code" >
-      <el-input placeholder="请输入唯一编码" v-model="role.code" :maxlength="10"></el-input>
+    <el-form-item class="c-item" label="唯一编码" prop="code">
+      <el-input placeholder="请输入唯一编码" v-model="role.code" :maxlength="50"></el-input>
     </el-form-item>
-    <el-form-item label="可用接口" prop="interIds">
+    <el-form-item v-if="inters.length" label="可用接口" prop="interIds">
       <el-checkbox-group v-model="role.interIds">
-        <el-checkbox v-for="(item,index) in inters" :key="index" :label="item.id">{{item.name}}</el-checkbox>
+        <el-checkbox v-for="(item,index) in inters" :disabled="item.disabled" :key="index" :label="item.id" name="inter">{{item.name}}</el-checkbox>
       </el-checkbox-group>
     </el-form-item>
-    <el-form-item class="c-item" label="可用菜单" prop="menuIds">
+    <el-form-item v-if="menus.length" class="c-item" label="可用菜单" prop="menuIds">
       <el-tree ref="tree" node-key="id" :data="menus" :props="defaultProps" style="padding-top:6px;" show-checkbox></el-tree>
     </el-form-item>
-    <el-form-item label="赋予账号">
+    <el-form-item v-if="users.length" label="赋予账号">
       <el-checkbox-group v-model="role.userIds">
         <el-checkbox v-for="(item,index) in users" :key="index" :label="item.id">{{item.username}}</el-checkbox>
       </el-checkbox-group>
@@ -26,6 +26,7 @@
 </template>
 
   <script>
+  import { SECURITY_MENUS_CODE } from '@/components/constant'
   export default {
     data() {
       return {
@@ -68,6 +69,14 @@
       async _initData() {
         await this.$http.get('/all').then((response) => {
           this.inters = response.data.inters
+          for (let i = 0; i < this.inters.length; i++) {
+            let element = this.inters[i]
+            if (element.code === SECURITY_MENUS_CODE) {
+              this.role.interIds.push(element.id)
+              element.disabled = true
+              break
+            }
+          }
         })
         await this.$http.get('/menus').then((response) => {
           this.menus = response.data
@@ -103,6 +112,10 @@
 <style lang="less">
 @import "../style/admin.less";
 .c-role-add {
+  .el-checkbox {
+    margin-left: 0;
+    margin-right: 30px;
+  }
   padding-top: 10px;
   .c-item {
     width: 20%;
